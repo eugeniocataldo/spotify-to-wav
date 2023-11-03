@@ -4,3 +4,4 @@ PyInquirer==1.0.3
 pyfiglet==0.7
 eyed3==0.9.6
 python-dotenv==0.21.0
+urllib3<2
