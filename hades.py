@@ -13,6 +13,7 @@ from pyfiglet import figlet_format
 from PyInquirer import print_json, prompt
 from spotipy.oauth2 import SpotifyClientCredentials
 from yt_dlp import YoutubeDL
+import ffmpeg
 
 # Load envars
 from dotenv import load_dotenv
@@ -45,7 +46,7 @@ class Hades:
     def get_ydl_opts(self, path):
         return {
             "format": "bestaudio/best",
-            "outtmpl": f"{path}/%(id)s.%(ext)s",
+            # "outtmpl": f"{path}/%(id)s.%(ext)s",
             "ignoreerrors": True,
             "postprocessors": [
                 {
@@ -133,7 +134,10 @@ class Hades:
         return tracks
 
     def add_track_metadata(self, track_id, metadata, path):
+        print(f"{path}/{track_id}.{PREFERRED_CODEC}")
         audiofile = eyed3.load(f"{path}/{track_id}.{PREFERRED_CODEC}")
+        print(audiofile)
+        print(type(audiofile))
         if audiofile.tag == None:
             audiofile.initTag()
 
@@ -154,6 +158,13 @@ class Hades:
         os.rename(src, dst)
 
     def download_tracks(self, pl_uri):
+
+        def download_from_url(url):
+            ydl.download([url])
+            stream = ffmpeg.input('output.m4a')
+            stream = ffmpeg.output(stream, 'output.wav')
+
+
         pl_details = self.get_playlist_details(pl_uri)
         path = self.create_download_directory(pl_details["pl_name"])
         tracks = self.check_existing_tracks(pl_details, path)
@@ -169,7 +180,9 @@ class Hades:
 
                 if video_ids:
                     url = "https://www.youtube.com/watch?v=" + video_ids[0]
-                    metadata = ydl.extract_info(url, download=False)
-                    downloaded_track = ydl.download([url])
+                    # metadata = ydl.extract_info(url, download=False)
+                    # downloaded_track = ydl.download([url])
 
-                    self.add_track_metadata(metadata["id"], track, path)
+                    download_from_url(url)
+
+                    # self.add_track_metadata(metadata["id"], track, path)

@@ -17,7 +17,14 @@ pip install -r requirements.txt
 
 ## Usage
 
-Just go to your playlist, click on share and copy the Playlist URI.
+First set your environment variables. In an anaconda prompt, write
+
+```shell
+SET CLIENT_ID=<link_from_spotify_dashboard_above>
+SET CLIENT_SECRET=<link_from_spotify_dashboard_above>
+```
+
+Then just go to your playlist, click on share and copy the Playlist URI.
 To use the shell interface run
 
 ```shell
