@@ -27,6 +27,7 @@ parser = ArgumentParser(description="Download Spotify playlist the easy way")
 # if you want to change the download path use absolute path
 # example: /home/user/music
 download_base_path = "./downloads"
+PREFERRED_CODEC = 'wav'
 
 
 class Hades:
@@ -49,8 +50,8 @@ class Hades:
             "postprocessors": [
                 {
                     "key": "FFmpegExtractAudio",
-                    "preferredcodec": "mp3",
-                    "preferredquality": "320",
+                    "preferredcodec": PREFERRED_CODEC,
+                    # "preferredquality": "320",
                 }
             ],
         }
@@ -127,12 +128,12 @@ class Hades:
         tracks = [
             track
             for track in playlist["pl_tracks"]
-            if f"{track['file_name']}.mp3" not in existing_tracks
+            if f"{track['file_name']}.{PREFERRED_CODEC}" not in existing_tracks
         ]
         return tracks
 
     def add_track_metadata(self, track_id, metadata, path):
-        audiofile = eyed3.load(f"{path}/{track_id}.mp3")
+        audiofile = eyed3.load(f"{path}/{track_id}.{PREFERRED_CODEC}")
         if audiofile.tag == None:
             audiofile.initTag()
 
@@ -148,8 +149,8 @@ class Hades:
         audiofile.tag.save()
 
         # Update downloaded file name
-        src = f"{path}/{track_id}.mp3"
-        dst = f"{path}/{metadata['file_name']}.mp3"
+        src = f"{path}/{track_id}.{PREFERRED_CODEC}"
+        dst = f"{path}/{metadata['file_name']}.{PREFERRED_CODEC}"
         os.rename(src, dst)
 
     def download_tracks(self, pl_uri):
