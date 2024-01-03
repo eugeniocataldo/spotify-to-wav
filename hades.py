@@ -28,7 +28,7 @@ parser = ArgumentParser(description="Download Spotify playlist the easy way")
 # if you want to change the download path use absolute path
 # example: /home/user/music
 download_base_path = "./downloads"
-PREFERRED_CODEC = 'wav'
+PREFERRED_CODEC = 'mp3'
 
 
 class Hades:
